@@ -21,6 +21,9 @@ inputs:
     description: Directory containing files to deploy.
     required: false
     default: .
+  base-url:
+    description: Base website url
+    required: true
   action:
     description: >
       Determines what this action will do when it is executed. Supported
@@ -50,13 +53,14 @@ runs:
         pr: ${{ github.event.number }}
         actionref: ${{ github.action_ref }}
         actionrepo: ${{ github.action_repository }}
+        baseurl: ${{ inputs.base-url }}
       run: |
         echo "action=$action" >> $GITHUB_ENV
         echo "targetdir=$umbrella/pr-$pr" >> $GITHUB_ENV
         echo "pr=$pr" >> $GITHUB_ENV
 
-        pagesurl=$(echo $GITHUB_REPOSITORY | sed 's/\//.github.io\//')
-        echo "pagesurl=$pagesurl" >> $GITHUB_ENV
+        # pagesurl=$(echo $GITHUB_REPOSITORY | sed 's/\//.github.io\//')
+        echo "pagesurl=$baseurl" >> $GITHUB_ENV
 
 
         echo "emptydir=$(mktemp -d)" >> $GITHUB_ENV
